@@ -11,10 +11,10 @@ PV = "${SWIFT_VERSION}"
 SRCREV_FORMAT = "swift_stdlib"
 
 SRC_URI = "\
-    git://github.com/swiftlang/swift.git;protocol=https;tag=swift-${PV}-RELEASE;nobranch=1;destsuffix=swift \
-    git://github.com/swiftlang/swift-corelibs-libdispatch.git;protocol=https;tag=swift-${PV}-RELEASE;nobranch=1;destsuffix=libdispatch \ 
-    git://github.com/swiftlang/swift-experimental-string-processing.git;protocol=https;tag=swift/release/${PV};nobranch=1;destsuffix=swift-experimental-string-processing \
-    git://github.com/swiftlang/swift-syntax.git;protocol=https;tag=release/${PV};nobranch=1;destsuffix=swift-syntax \
+    git://github.com/swiftlang/swift.git;protocol=https;branch=release/${PV};nobranch=0;destsuffix=swift;rev=release/${PV}; \
+    git://github.com/swiftlang/swift-corelibs-libdispatch.git;protocol=https;branch=release/${PV};nobranch=0;destsuffix=libdispatch;rev=release/${PV} \
+    git://github.com/swiftlang/swift-experimental-string-processing.git;protocol=https;branch=swift/release/${PV};nobranch=0;destsuffix=swift-experimental-string-processing;rev=swift/release/${PV}; \
+    git://github.com/swiftlang/swift-syntax.git;protocol=https;branch=release/${PV};nobranch=0;destsuffix=swift-syntax;rev=release/${PV} \
     file://cmake-configure-swift-stdlib.sh \
     file://llvm-cmake-modules \
     file://PR75367-buildbot-cross-compile.diff \

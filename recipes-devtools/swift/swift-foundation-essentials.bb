@@ -9,10 +9,11 @@ require swift-version.inc
 PV = "${SWIFT_VERSION}"
 
 SRCREV_FORMAT = "swift_foundation"
+#SRCREV = "release/${PV}"
 
-SRC_URI = "git://github.com/swiftlang/swift-foundation.git;protocol=https;tag=swift-${PV}-RELEASE;nobranch=1;"
-SRC_URI += "git://github.com/swiftlang/swift-foundation-icu.git;protocol=https;tag=swift-${PV}-RELEASE;nobranch=1;destsuffix=swift-foundation-icu;"
-SRC_URI += "git://github.com/apple/swift-collections.git;protocol=https;tag=1.1.2;nobranch=1;destsuffix=swift-collections;"
+SRC_URI = "git://github.com/swiftlang/swift-foundation.git;protocol=https;branch=release/${PV};nobranch=0;rev=release/${PV}"
+SRC_URI += "git://github.com/swiftlang/swift-foundation-icu.git;protocol=https;branch=release/${PV};nobranch=0;destsuffix=swift-foundation-icu;rev=release/${PV}"
+SRC_URI += "git://github.com/apple/swift-collections.git;protocol=https;nobranch=1;tag=1.1.4;destsuffix=swift-collections;"
 
 S = "${WORKDIR}/git"
 

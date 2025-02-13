@@ -10,7 +10,8 @@ PV = "${SWIFT_VERSION}"
 
 DEPENDS = "swift-stdlib"
 
-SRC_URI = "git://github.com/swiftlang/swift-corelibs-libdispatch.git;protocol=https;tag=swift-${PV}-RELEASE;nobranch=1"
+SRC_URI = "git://github.com/swiftlang/swift-corelibs-libdispatch.git;protocol=https;branch=${SRCREV};nobranch=0"
+SRCREV = "release/${PV}"
 
 #RDEPENDS:${PN} = "ncurses"
 

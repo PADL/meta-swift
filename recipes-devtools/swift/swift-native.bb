@@ -16,17 +16,18 @@ def swift_native_arch_suffix(d):
 
 def swift_native_arch_checksum(d):
     sha256 = {
-      "x86_64": "711d1d9e81c6d0dbc36202d9bc9bd491cc5fa79854fd0205ba27f40122b6ad5f",
-      "aarch64": "ae8a4ce62743020109e613fe6313fa5913d66608d7aa5b0c5e459f0bba57e6d3"
+      "x86_64": "0755d4d82d7709153503909ac7df40a6c9e78978c1c96ee6dc4872e3cd6b4bba",
+      "aarch64": "XXX"
     }
 
     host_arch = d.getVar('HOST_ARCH')
     return sha256[host_arch]
 
 SWIFT_ARCH_SUFFIX = "${@swift_native_arch_suffix(d)}"
+SWIFT_DEV_SNAPSHOT = "2025-02-10-a"
 
-SRC_DIR = "swift-${PV}-RELEASE-ubuntu24.04${SWIFT_ARCH_SUFFIX}"
-SRC_URI = "https://download.swift.org/swift-${PV}-release/ubuntu2404${SWIFT_ARCH_SUFFIX}/swift-${PV}-RELEASE/swift-${PV}-RELEASE-ubuntu24.04${SWIFT_ARCH_SUFFIX}.tar.gz"
+SRC_DIR = "swift-${PV}-DEVELOPMENT-SNAPSHOT-${SWIFT_DEV_SNAPSHOT}-ubuntu24.04${SWIFT_ARCH_SUFFIX}"
+SRC_URI = "https://download.swift.org/swift-${PV}-branch/ubuntu2404${SWIFT_ARCH_SUFFIX}/swift-${PV}-DEVELOPMENT-SNAPSHOT-${SWIFT_DEV_SNAPSHOT}/swift-${PV}-DEVELOPMENT-SNAPSHOT-${SWIFT_DEV_SNAPSHOT}-ubuntu24.04${SWIFT_ARCH_SUFFIX}.tar.gz"
 SRC_URI[sha256sum] = "${@swift_native_arch_checksum(d)}"
 
 DEPENDS = "curl"
