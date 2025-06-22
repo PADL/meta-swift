@@ -17,7 +17,6 @@ SRC_URI = "\
     git://github.com/swiftlang/swift-experimental-string-processing.git;protocol=https;name=stringproc;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=swift-experimental-string-processing; \
     git://github.com/swiftlang/swift-syntax.git;protocol=https;name=syntax;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=swift-syntax; \
     file://llvm-cmake-modules \
-    file://PR75367-buildbot-cross-compile.diff \
     "
 
 S = "${WORKDIR}/swift"
