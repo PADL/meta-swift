@@ -12,11 +12,11 @@ PV = "${SWIFT_VERSION}+git${SRCPV}"
 SRCREV_FORMAT = "swift_libdispatch_stringproc_syntax"
 
 SRC_URI = "\
+    git://github.com/swiftlang/llvm-project.git;protocol=https;name=llvm-project;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=llvm-project; \
     git://github.com/swiftlang/swift.git;protocol=https;name=swift;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=swift; \
     git://github.com/swiftlang/swift-corelibs-libdispatch.git;protocol=https;name=libdispatch;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=libdispatch; \
     git://github.com/swiftlang/swift-experimental-string-processing.git;protocol=https;name=stringproc;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=swift-experimental-string-processing; \
     git://github.com/swiftlang/swift-syntax.git;protocol=https;name=syntax;tag=swift-${SWIFT_VERSION}-RELEASE;nobranch=1;destsuffix=swift-syntax; \
-    file://llvm-cmake-modules \
     "
 
 S = "${WORKDIR}/swift"
@@ -46,6 +46,8 @@ addtask fix_gcc_install_dir before do_configure after do_prepare_recipe_sysroot
 
 do_configure() {
     export SDKROOT=${STAGING_DIR_TARGET}
+    export LLVM_SRCDIR=${WORKDIR}/llvm-project
+    export LLVM_BUILDDIR=${LLVM_SRCDIR}/build
     export SWIFT_SRCDIR=${S}
     export SWIFT_NATIVE_PATH=${STAGING_DIR_NATIVE}/usr/bin
     export CC=${STAGING_DIR_NATIVE}/usr/bin/clang
@@ -54,8 +56,18 @@ do_configure() {
     export CXX=${STAGING_DIR_NATIVE}/usr/bin/clang++
     export CXXFLAGS="${SWIFT_CXX_FLAGS}"
 
-    mkdir -p ${HOST_LLVM_PATH}/cmake/llvm
-    cp ${WORKDIR}/llvm-cmake-modules/* ${HOST_LLVM_PATH}/cmake/llvm
+    rm -rf ${LLVM_BUILDDIR}
+    mkdir -p ${LLVM_BUILDDIR}
+
+    # Configure the llvm project to get the cmake files generated, so we can point
+    # LLVM_DIR to this folder
+    cmake -S ${LLVM_SRCDIR}/llvm -B ${LLVM_BUILDDIR} -G Ninja \
+       -DCMAKE_INSTALL_PREFIX=${STAGING_DIR_NATIVE}/usr/lib \
+       -DCMAKE_C_COMPILER=${SWIFT_NATIVE_PATH}/clang \
+       -DCMAKE_CXX_COMPILER=${SWIFT_NATIVE_PATH}/clang++ \
+       -DLLVM_TARGETS_TO_BUILD="X86;ARM;AArch64" \
+       -DLLVM_ENABLE_PROJECTS="llvm" \
+       -DCMAKE_BUILD_TYPE=Release
 
     rm -rf ${SWIFT_BUILDDIR}
     mkdir -p ${SWIFT_BUILDDIR}
@@ -93,8 +105,8 @@ set(BUILD_TESTING OFF)
 set(BUILD_SHARED_LIBS ON)
 
 set(LLVM_USE_LINKER lld)
-set(LLVM_DIR ${HOST_LLVM_PATH}/cmake/llvm)
-set(LLVM_BUILD_LIBRARY_DIR ${HOST_LLVM_PATH})
+set(LLVM_DIR ${LLVM_BUILDDIR}/lib/cmake/llvm)
+set(LLVM_BUILD_LIBRARY_DIR ${LLVM_BUILDDIR})
 set(LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN ON)
 
 set(SWIFT_USE_LINKER lld)
